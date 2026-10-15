@@ -164,3 +164,8 @@ The processed CSV tables and figures are already included in `results/`.
 6. To regenerate analysis without retraining, extract `da3_raw.zip` from the GitHub Release and configure `RAW_DIR` to point to the extracted raw results.
 
 See `outputs/config.json` for the recorded experiment configuration and `outputs/README_reproducibility.md` for additional run notes.
+
+## Download Experiment Archives
+
+- [Raw Experiment Results](https://github.com/YokeshGaneshBabu/cnn-deep-features-with-classical-ml/releases)
+- [Tables and Figures](https://github.com/YokeshGaneshBabu/cnn-deep-features-with-classical-ml/releases)
