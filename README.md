@@ -22,11 +22,11 @@ The current end-to-end results favour the reference CNN on average balanced accu
 ├── .gitignore
 ├── outputs/
 │   ├── config.json
-│   ├── README_reproducibility.md
-│   └── figures/
+│   └──  README_reproducibility.md
 ├── results/
 │   ├── tables/
 │   └── figures/
+├── cnn_deep_features_with_classical_ml.pptx
 └── report/
     └── figures/
         ├── baseline_architecture.png
