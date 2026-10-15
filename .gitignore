@@ -1,0 +1,10 @@
+# Large experiment archives distributed through GitHub Releases
+da3_raw.zip
+da3_tables_figures.zip
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# Jupyter temporary checkpoints
+.ipynb_checkpoints/
