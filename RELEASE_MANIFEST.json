@@ -1,0 +1,18 @@
+{
+  "consolidated_notebook": "ICCAD12_CNN_Classical_ML_Reproducible.ipynb",
+  "source_run_notebook": "notebookbe28e41b89.ipynb",
+  "source_analysis_notebook": "notebook00b6376dd1.ipynb",
+  "figures_exported_initially": 5,
+  "additional_figures_generated_from_csv": [
+    "fig_average_balanced_accuracy_methods.png",
+    "fig_backbone_effect.png"
+  ],
+  "architecture_images_included": true,
+  "note": "Architecture images were not present among the current uploaded files.",
+  "tables_count": 41,
+  "figures_count": 7,
+  "architecture_images": [
+    "baseline_architecture.png",
+    "proposed_architecture.png"
+  ]
+}
