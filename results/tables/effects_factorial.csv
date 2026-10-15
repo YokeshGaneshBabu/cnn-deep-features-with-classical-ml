@@ -1,0 +1,45 @@
+factor,context,A,B,delta_BA,std_over_seeds,n_seeds,p_paired_t
+backbone: ref -> proposed,"loss=focal, head=e2e","Reference CNN (end-to-end, focal)","Proposed CNN (end-to-end, focal)",-0.03797122624939313,0.017597916615341234,5,0.008493382295673662
+backbone: ref -> proposed,"loss=focal, head=SVM","SVM (L) [Reference, focal]","SVM (L) [Proposed, focal]",-0.059445521610782225,0.006020110900258703,5,2.4902166395445236e-05
+backbone: ref -> proposed,"loss=focal, head=RF","RF (L) [Reference, focal]","RF (L) [Proposed, focal]",-0.05360957752797302,0.016863626643767025,5,0.002069257656390461
+backbone: ref -> proposed,"loss=focal, head=LR","LR (L) [Reference, focal]","LR (L) [Proposed, focal]",-0.046255666491474834,0.013657244294557672,5,0.0016298120186522122
+backbone: ref -> proposed,"loss=focal, head=DT","DT (L) [Reference, focal]","DT (L) [Proposed, focal]",-0.010029951740103637,0.03736183338788242,5,0.5806703780168827
+backbone: ref -> proposed,"loss=focal, head=ENS","Ensemble (L) [Reference, focal]","Ensemble (L) [Proposed, focal]",-0.046112290179255624,0.011033547054531998,5,0.0007300604396392122
+backbone: ref -> proposed,"loss=bce, head=e2e","Reference CNN (end-to-end, bce)","Proposed CNN (end-to-end, bce)",-0.043515076169702335,0.03952158546980907,5,0.06954077672093259
+backbone: ref -> proposed,"loss=bce, head=SVM","SVM (L) [Reference, bce]","SVM (L) [Proposed, bce]",-0.060391328766511966,0.031180287527462547,5,0.01234083724345367
+backbone: ref -> proposed,"loss=bce, head=RF","RF (L) [Reference, bce]","RF (L) [Proposed, bce]",-0.05068767779265364,0.03314264323331708,5,0.026785183180976252
+backbone: ref -> proposed,"loss=bce, head=LR","LR (L) [Reference, bce]","LR (L) [Proposed, bce]",-0.04866416010162995,0.024576848744284185,5,0.011443296680456027
+backbone: ref -> proposed,"loss=bce, head=DT","DT (L) [Reference, bce]","DT (L) [Proposed, bce]",0.004451378237688641,0.01387340895327159,5,0.5127589730305854
+backbone: ref -> proposed,"loss=bce, head=ENS","Ensemble (L) [Reference, bce]","Ensemble (L) [Proposed, bce]",-0.0496682739270915,0.03205149670667427,5,0.025698036960053745
+loss: BCE -> focal,"backbone=ref, head=e2e","Reference CNN (end-to-end, bce)","Reference CNN (end-to-end, focal)",0.0009970606356855427,0.02631452619158268,5,0.936551181477622
+loss: BCE -> focal,"backbone=ref, head=SVM","SVM (L) [Reference, bce]","SVM (L) [Reference, focal]",-0.00202097852199985,0.026031007614042465,5,0.870609284491996
+loss: BCE -> focal,"backbone=ref, head=RF","RF (L) [Reference, bce]","RF (L) [Reference, focal]",0.0007292101948009444,0.01701454461115488,5,0.9282620572788691
+loss: BCE -> focal,"backbone=ref, head=LR","LR (L) [Reference, bce]","LR (L) [Reference, focal]",0.00284813585976289,0.02055848543205902,5,0.7721952535693668
+loss: BCE -> focal,"backbone=ref, head=DT","DT (L) [Reference, bce]","DT (L) [Reference, focal]",0.01916764701283038,0.019787861873122065,5,0.09624198919373364
+loss: BCE -> focal,"backbone=ref, head=ENS","Ensemble (L) [Reference, bce]","Ensemble (L) [Reference, focal]",0.0033749970835756926,0.024155540708914798,5,0.7703293125052925
+loss: BCE -> focal,"backbone=proposed, head=e2e","Proposed CNN (end-to-end, bce)","Proposed CNN (end-to-end, focal)",0.00654091055599475,0.015697669304888785,5,0.40422192203149615
+loss: BCE -> focal,"backbone=proposed, head=SVM","SVM (L) [Proposed, bce]","SVM (L) [Proposed, focal]",-0.0010751713662701112,0.02179036282036438,5,0.9174608055912425
+loss: BCE -> focal,"backbone=proposed, head=RF","RF (L) [Proposed, bce]","RF (L) [Proposed, focal]",-0.0021926895405184332,0.014463189026943993,5,0.7516599539776678
+loss: BCE -> focal,"backbone=proposed, head=LR","LR (L) [Proposed, bce]","LR (L) [Proposed, focal]",0.005256629469918006,0.019355504114942326,5,0.5764513640847718
+loss: BCE -> focal,"backbone=proposed, head=DT","DT (L) [Proposed, bce]","DT (L) [Proposed, focal]",0.0046863170350381015,0.01532693462820403,5,0.5317196383012772
+loss: BCE -> focal,"backbone=proposed, head=ENS","Ensemble (L) [Proposed, bce]","Ensemble (L) [Proposed, focal]",0.0069309808314115704,0.0187220603423895,5,0.45431225747648135
+head: end-to-end -> classical,"backbone=ref, loss=focal, head=SVM","Reference CNN (end-to-end, focal)","SVM (L) [Reference, focal]",0.012944398874138563,0.018006767695724873,5,0.18323934951004567
+head: end-to-end -> classical,"backbone=ref, loss=focal, head=RF","Reference CNN (end-to-end, focal)","RF (L) [Reference, focal]",0.008890929119530998,0.005948982346285031,5,0.028785651031892793
+head: end-to-end -> classical,"backbone=ref, loss=focal, head=LR","Reference CNN (end-to-end, focal)","LR (L) [Reference, focal]",0.012602115639605671,0.015006134918610328,5,0.1336136720145466
+head: end-to-end -> classical,"backbone=ref, loss=focal, head=DT","Reference CNN (end-to-end, focal)","DT (L) [Reference, focal]",-0.034074723887372184,0.02350296579720518,5,0.031618144561030195
+head: end-to-end -> classical,"backbone=ref, loss=focal, head=ENS","Reference CNN (end-to-end, focal)","Ensemble (L) [Reference, focal]",0.012175394950699303,0.01165309721417676,5,0.07970128203705301
+head: end-to-end -> classical,"backbone=ref, loss=bce, head=SVM","Reference CNN (end-to-end, bce)","SVM (L) [Reference, bce]",0.015962438031823956,0.013757142998638016,5,0.06039598618315961
+head: end-to-end -> classical,"backbone=ref, loss=bce, head=RF","Reference CNN (end-to-end, bce)","RF (L) [Reference, bce]",0.009158779560415598,0.012721764830484273,5,0.18272528416152173
+head: end-to-end -> classical,"backbone=ref, loss=bce, head=LR","Reference CNN (end-to-end, bce)","LR (L) [Reference, bce]",0.010751040415528323,0.015437976682578597,5,0.19441510535582598
+head: end-to-end -> classical,"backbone=ref, loss=bce, head=DT","Reference CNN (end-to-end, bce)","DT (L) [Reference, bce]",-0.05224531026451702,0.02975691990893878,5,0.017161483640352602
+head: end-to-end -> classical,"backbone=ref, loss=bce, head=ENS","Reference CNN (end-to-end, bce)","Ensemble (L) [Reference, bce]",0.009797458502809154,0.009183764881992166,5,0.07553698008738209
+head: end-to-end -> classical,"backbone=proposed, loss=focal, head=SVM","Proposed CNN (end-to-end, focal)","SVM (L) [Proposed, focal]",-0.008529896487250532,0.011971775469886732,5,0.18633605621943128
+head: end-to-end -> classical,"backbone=proposed, loss=focal, head=RF","Proposed CNN (end-to-end, focal)","RF (L) [Proposed, focal]",-0.006747422159048888,0.017217990120550156,5,0.4303518295948829
+head: end-to-end -> classical,"backbone=proposed, loss=focal, head=LR","Proposed CNN (end-to-end, focal)","LR (L) [Proposed, focal]",0.004317675397523968,0.017503502429856183,5,0.6105983075376835
+head: end-to-end -> classical,"backbone=proposed, loss=focal, head=DT","Proposed CNN (end-to-end, focal)","DT (L) [Proposed, focal]",-0.006133449378082689,0.024221337478671532,5,0.6014960036702244
+head: end-to-end -> classical,"backbone=proposed, loss=focal, head=ENS","Proposed CNN (end-to-end, focal)","Ensemble (L) [Proposed, focal]",0.004034331020836812,0.013710878993224748,5,0.5465112288467717
+head: end-to-end -> classical,"backbone=proposed, loss=bce, head=SVM","Proposed CNN (end-to-end, bce)","SVM (L) [Proposed, bce]",-0.0009138145649856711,0.03003155733670989,5,0.9490190493173012
+head: end-to-end -> classical,"backbone=proposed, loss=bce, head=RF","Proposed CNN (end-to-end, bce)","RF (L) [Proposed, bce]",0.001986177937464295,0.017042274979404547,5,0.8072663827241665
+head: end-to-end -> classical,"backbone=proposed, loss=bce, head=LR","Proposed CNN (end-to-end, bce)","LR (L) [Proposed, bce]",0.0056019564836007115,0.029944584705119792,5,0.6971974346764287
+head: end-to-end -> classical,"backbone=proposed, loss=bce, head=DT","Proposed CNN (end-to-end, bce)","DT (L) [Proposed, bce]",-0.00427885585712604,0.013035339464050725,5,0.5036576985134696
+head: end-to-end -> classical,"backbone=proposed, loss=bce, head=ENS","Proposed CNN (end-to-end, bce)","Ensemble (L) [Proposed, bce]",0.0036442607454199917,0.015248027256699043,5,0.6213744719713475
