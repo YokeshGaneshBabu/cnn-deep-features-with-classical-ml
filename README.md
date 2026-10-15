@@ -16,7 +16,7 @@ The current end-to-end results favour the reference CNN on average balanced accu
 
 ```text
 .
-├── ICCAD12_CNN_Classical_ML_Reproducible.ipynb
+├── cnn_deep_features_with_classical_ml.ipynb
 ├── README.md
 ├── RELEASE_MANIFEST.json
 ├── .gitignore
