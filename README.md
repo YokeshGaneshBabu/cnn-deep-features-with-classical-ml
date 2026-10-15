@@ -1,16 +1,16 @@
-# CNN Deep Features with Classical Machine Learning Classifiers for Lithography Hotspot Detection
+# CNN Deep Features with Classical Machine Learning for Lithography Hotspot Detection
 
----
+This repository contains the experiment notebook, processed result tables, figures, configuration files, and supporting materials for evaluating CNN-based lithography hotspot detection on the ICCAD-12 benchmark suite.
 
 ## Overview
 
-This repository contains the experiment pipeline, raw outputs, result tables, figures, and reproducibility notes for the study *“CNN Deep Features with Classical Machine Learning Classifiers for Lithography Hotspot Detection.”*
+**Research question:** How do CNN backbone choice, training loss, feature depth, and classical machine-learning classifiers affect lithography hotspot detection compared with end-to-end CNN classification?
 
-**Research Question:** Can features learned by a CNN and subsequently classified using classical machine-learning models improve lithography hotspot detection compared with direct end-to-end CNN classification on the ICCAD-12 benchmark suite?
+The experiments evaluate five ICCAD-12 benchmarks independently. They compare a lightweight reference CNN with a residual depthwise-separable CNN and investigate binary cross-entropy (BCE) and focal loss, CNN feature representations, and classical classification heads.
 
-The study evaluates five ICCAD-12 benchmarks separately. It compares a lightweight reference CNN against a proposed residual depthwise-separable CNN, and examines the effects of backbone, loss function, feature depth, and classical classifier. The experiment grid covers **5 benchmarks × 2 backbones × 2 losses × 5 seeds = 100 run configurations**.
+The planned experiment grid contains five benchmarks, two backbones, two loss functions, and five random seeds (100 benchmark-level run configurations).
 
-> **Main result:** In the current five-seed results, the reference CNN has higher average balanced accuracy than the proposed CNN trained end-to-end. Classical heads are useful as an ablation, but the results do not support a blanket claim that CNN features with classical classifiers outperform the reference baseline.
+The current end-to-end results favour the reference CNN on average balanced accuracy. The classical-classifier experiments provide additional comparisons across benchmarks and feature configurations; the results do not show one approach to be universally superior.
 
 ## Repository Structure
 
@@ -19,103 +19,81 @@ The study evaluates five ICCAD-12 benchmarks separately. It compares a lightweig
 ├── ICCAD12_CNN_Classical_ML_Reproducible.ipynb
 ├── README.md
 ├── RELEASE_MANIFEST.json
-├── da3_raw.zip
-├── da3_tables_figures.zip
+├── .gitignore
 ├── outputs/
 │   ├── config.json
-│   └── README_reproducibility.md
+│   ├── README_reproducibility.md
+│   └── figures/
 ├── results/
-│   ├── tables/                 # CSV tables from the experiment outputs
-│   └── figures/                # Existing and supplementary result figures
+│   ├── tables/
+│   └── figures/
 └── report/
-    └── figures/                # Report-ready figure copies and architectures
+    └── figures/
+        ├── baseline_architecture.png
+        └── proposed_architecture.png
 ```
 
-The raw archive is retained as `da3_raw.zip`. Because it is large, consider publishing it as a GitHub Release asset and linking it from this README rather than committing it to the main Git history.
+The notebook is the main entry point. Processed CSV tables and figures are stored under `results/`; configuration and run notes are under `outputs/`. Architecture diagrams used in the report are under `report/figures/`.
 
 ## Dataset
 
-**ICCAD-12 benchmark suite** — five separate binary classification benchmarks for lithography hotspot (HS) versus non-hotspot (NHS) detection.
+The project evaluates five ICCAD-12 lithography hotspot benchmarks as separate binary classification tasks: hotspot (HS) versus non-hotspot (NHS). The primary experiments do not merge the benchmarks into one dataset.
 
-The benchmarks are evaluated independently rather than merged for the primary experiments. The project uses a training/validation/test workflow: hyperparameters and decision thresholds are selected using validation data, and final metrics are computed on the held-out test split.
+The workflow uses training, validation, and held-out test data. Model settings and decision thresholds are selected using validation data; final reported test metrics are calculated on the held-out test split.
 
-**Dataset note:** The dataset copy used for these experiments was obtained from a shared download source rather than independently verified against the official contest release. The ICCAD-1 test non-hotspot count in the current dataset copy differs from a count reported in one literature source. This provenance/count discrepancy should be resolved or disclosed before treating cross-paper metrics as directly comparable.
+The dataset itself is not included in this repository or the raw-results archive. Configure the dataset path in the notebook for runs that require image data.
 
-## Architecture
+## Models
 
-### Reference Baseline CNN
+### Reference CNN
 
-![Reference baseline CNN architecture](report/figures/baseline_architecture.png)
+![Reference CNN architecture](report/figures/baseline_architecture.png)
 
-The reference model is a lightweight CNN with two convolutional basic blocks, batch normalization, ELU activations, max pooling, flattening, dropout, and a sigmoid output. It has **6,949 trainable parameters** according to the model configuration used in this project.
+The reference model is a compact CNN with two convolutional blocks, batch normalization, ELU activations, max pooling, flattening, dropout, and a sigmoid output. The saved experiment configuration reports **6,949 trainable parameters**.
 
-The reference CNN is trained end-to-end and serves as the baseline; it is not used as the feature extractor for the proposed classical-head experiments.
+This model is evaluated as an end-to-end baseline.
 
-### Proposed Architecture
+### Proposed CNN
 
 ![Proposed residual depthwise-separable CNN architecture](report/figures/proposed_architecture.png)
 
-The proposed backbone uses a stem followed by three residual depthwise-separable convolution blocks (64, 128, and 192 filters), with batch normalization and spatial dropout. It has **163,489 parameters** according to the experiment configuration.
+The proposed backbone consists of a stem followed by three residual depthwise-separable convolution blocks with 64, 128, and 192 filters. Batch normalization and spatial dropout are also used. The saved experiment configuration reports **163,489 parameters**.
 
-Feature taps are evaluated as follows:
+The feature-extraction experiments evaluate these representations:
 
-- **Early features:** global-average-pooled activations after the first residual block (64 dimensions).
-- **Late features:** the 128-dimensional representation immediately before the end-to-end classification head.
-- **Combined features:** concatenation of early and late features (192 dimensions).
+- **Early features:** 64-dimensional representation after the first residual block.
+- **Late features:** 128-dimensional representation used before the classification head.
+- **Combined features:** concatenation of early and late representations, giving 192 dimensions.
 
-Classical classifiers are trained on the extracted representations. The evaluated heads include **SVM, Random Forest, Logistic Regression, Decision Tree, and an ensemble**. The ensemble combines SVM, Random Forest, and Logistic Regression on late features only. Early and combined features are separate ablation settings, not inputs to that ensemble.
+### Classical classifiers
 
-## Methodology
+The extracted representations are evaluated with:
 
-### 1. Backbone and loss comparison
-
-Both backbones are evaluated with binary cross-entropy (BCE) and focal loss. The focal-loss configuration uses **γ = 2.0 and α = 0.75**. This factorial setup is intended to separate the effects of backbone and loss rather than attributing every performance difference to a single design choice.
-
-### 2. CNN feature extraction
-
-The proposed backbone is trained end-to-end and then reused to extract early, late, and combined representations. The extracted features are passed to classical classifiers, allowing the experiment to compare end-to-end CNN classification with two-stage feature-extraction pipelines.
-
-### 3. Classical classifiers
-
-The notebook evaluates:
-
-- **SVM:** RBF kernel; its hyperparameter selection uses validation data.
-- **Random Forest:** tree-based classifier.
+- **SVM:** RBF-kernel support vector machine.
+- **Random Forest:** tree-ensemble classifier.
 - **Logistic Regression:** linear probabilistic classifier.
-- **Decision Tree:** individual tree classifier.
-- **Ensemble:** soft-voting combination of SVM, Random Forest, and Logistic Regression on late features.
+- **Decision Tree:** single-tree classifier.
+- **Ensemble:** soft-voting combination of SVM, Random Forest, and Logistic Regression, evaluated on late features.
 
-Where applicable, scaling and classifier settings are fitted using training/validation data only. Test examples must not be used to choose model settings or thresholds.
+The ensemble is a separate late-feature experiment; it does not combine the early and combined feature settings.
 
-### 4. Threshold selection and evaluation
+## Experimental Method
 
-Decision thresholds and tunable hyperparameters are selected on validation data. Final test metrics include balanced accuracy, recall, precision, F1, specificity, false-alarm counts, ROC-AUC, and average precision where available.
+### Backbone and loss
 
-The analysis also includes confidence intervals, statistical comparisons with multiple-test correction, calibration metrics, threshold sensitivity, and compute-cost measurements. Results are reported across five seeds; GPU nondeterminism means exact bitwise reproduction is not guaranteed.
+Both CNN backbones are evaluated with binary cross-entropy and focal loss. The focal-loss configuration uses \(\gamma = 2.0\) and \(\alpha = 0.75\).
 
-## Setup and Reproducibility
+### Feature extraction and classification
 
-The notebook is the main entry point:
+The proposed CNN is trained end-to-end and used to extract early, late, and combined feature representations. Classical classifiers are then fitted to these representations. This enables comparison between direct CNN classification and a two-stage feature-extraction pipeline.
 
-`ICCAD12_CNN_Classical_ML_Reproducible.ipynb`
+### Validation and test protocol
 
-A GPU-enabled Kaggle or Colab environment is recommended. Install the dependencies required by the notebook and make the ICCAD-12 dataset available at the path expected by its dataset-loading cells.
+Hyperparameters and decision thresholds are selected using validation data. Test data are reserved for final evaluation and should not be used to select model settings or thresholds.
 
-### Run the experiments
+The saved analysis includes metrics such as balanced accuracy, precision, recall, F1, specificity, false-alarm counts, ROC-AUC, and average precision where available. Additional analyses include confidence intervals, statistical comparisons, calibration, threshold sensitivity, and compute cost.
 
-1. Open the consolidated notebook.
-2. Configure the runtime and dataset path.
-3. Run the cells in order to execute the experiment pipeline.
-4. Preserve generated raw JSON/NPZ results so interrupted runs can be resumed where supported.
-5. Run the analysis section to regenerate tables and figures from the saved outputs.
-
-### Reproduce analysis without retraining
-
-1. Download and extract `da3_raw.zip`.
-2. Point the notebook's raw-results path (`RAW_DIR`) to the extracted raw-output directory.
-3. Run the analysis/export cells that consume those saved runs.
-
-See `outputs/config.json` for the recorded configuration and `outputs/README_reproducibility.md` for the run notes. The two original Kaggle notebooks may also be retained as provenance for the original training run and resumed analysis; the consolidated notebook is the repository's main entry point.
+Results are collected over five seeds. GPU nondeterminism and differences in software or hardware environments may prevent exact bitwise reproduction.
 
 ## Results Summary
 
@@ -125,49 +103,64 @@ Average balanced accuracy across the five benchmarks, reported as mean ± standa
 
 | Method | Average balanced accuracy |
 |---|---:|
-| Reference CNN (end-to-end, focal loss) | **0.924 ± 0.019** |
-| Proposed CNN (end-to-end, focal loss) | 0.886 ± 0.014 |
+| Reference CNN, end-to-end with focal loss | **0.924 ± 0.019** |
+| Proposed CNN, end-to-end with focal loss | 0.886 ± 0.014 |
 
-The reference CNN is stronger on average in these results. The proposed CNN performs better on some individual benchmarks, but its average performance does not establish an overall improvement.
+In these results, the reference CNN has higher average balanced accuracy. Performance of the proposed CNN varies by benchmark, making the per-benchmark results important context for the aggregate average.
 
-### Interpretation
+### Interpreting the results
 
-- The reference CNN is a strong baseline and should remain in the main comparison.
-- Effects of backbone, loss, feature depth, and classical head should be described using the matching ablation tables and statistical tests.
-- Performance can vary substantially by benchmark, especially on smaller and more imbalanced test sets.
-- Do not claim that the proposed pipeline is state of the art or consistently superior to published detectors without a verified, protocol-aware comparison.
+- The reference CNN provides an important baseline for the feature-extraction experiments.
+- Effects of backbone, loss function, feature depth, and classifier should be interpreted using the corresponding result tables.
+- Performance may vary across benchmarks, particularly where test sets are small or class distributions are imbalanced.
+- Results from this experiment alone do not establish state-of-the-art performance or consistent superiority over published methods.
 
-For per-benchmark results and uncertainty estimates, see the CSV files in `results/tables/`. For visual summaries, see `results/figures/`.
+See `results/tables/` for per-benchmark metrics and uncertainty estimates, and `results/figures/` for visual summaries.
 
 ## Figures
 
-The figure directory includes the benchmark class distribution, balanced-accuracy comparison, confusion matrices, calibration, threshold sensitivity, and supplementary plots of method averages and backbone effects. The two architecture diagrams are included separately:
+The figure collection includes benchmark class distributions, balanced-accuracy comparisons, confusion matrices, calibration plots, threshold-sensitivity plots, and supplementary comparisons of method averages and backbone effects.
+
+Architecture diagrams:
 
 - `report/figures/baseline_architecture.png`
 - `report/figures/proposed_architecture.png`
 
-Figure filenames are intended to be descriptive. When inserting them into a report, use figure numbers and captions that match the final order in the document.
-
 ## Statistical Analysis
 
-The saved tables include mean ± standard deviation over seeds, confidence intervals, paired statistical comparisons, and Holm correction for multiple comparisons. Interpret significance cautiously: five seeds provide limited statistical power, and tests over repeated runs do not eliminate all uncertainty due to data splitting or GPU nondeterminism.
+The available result tables include seed-level summaries, confidence intervals, paired comparisons, and Holm correction for multiple comparisons where calculated. With five seeds, the analysis has limited power to detect small effects. Repeated runs also do not remove uncertainty associated with data splits or nondeterministic operations.
 
-Published comparisons are not automatically statistically comparable to these results. Literature values may come from different image resolutions, dataset versions, splits, threshold protocols, and false-alarm definitions. Cite and verify the original source for every published value.
+Published-method results are not included in the numerical summary because benchmark and evaluation protocols may differ.
 
 ## Compute Cost
 
-The experiment outputs include model parameter counts, available FLOP measurements, feature-extraction time, head inference latency, and training/fit times. Latency depends on the hardware and measurement setup; it should be reported as a measured result from this setup, not as a universal runtime guarantee.
+The experiment outputs include parameter counts and, where available, FLOP estimates, feature-extraction time, classifier inference latency, and training or fitting times. Latency depends on the hardware and measurement procedure used; these measurements describe the recorded setup rather than a universal runtime.
 
 ## Limitations
 
-- Only five seeds were used, limiting power to detect small differences.
-- Some validation sets, particularly for the smaller benchmarks, contain few hotspot examples; threshold/model selection can therefore be unstable.
-- GPU operations were not fully deterministic, so exact bitwise reproduction is not guaranteed.
-- The dataset provenance and ICCAD-1 non-hotspot count discrepancy need to be documented when comparing against published work.
-- Published methods may use different input resolutions, splits, thresholds, and false-alarm definitions.
-- The latency measurements represent a specific execution setup.
-- Cross-benchmark generalization was not established by this experiment.
+- The experiments use five random seeds, limiting statistical power for small differences.
+- Small validation sets, especially for smaller benchmarks, can make model and threshold selection unstable.
+- GPU operations may be nondeterministic, so exact bitwise reproduction is not guaranteed.
+- The dataset copy used in the experiments has a provenance and benchmark-count discrepancy, which limits direct comparison with published results.
+- Published methods may use different input resolutions, dataset versions, splits, thresholds, and false-alarm definitions.
+- Latency measurements are specific to the recorded execution environment.
+- The experiments do not establish cross-benchmark generalization.
 
-## References
+## Raw Experiment Results
 
-The report's bibliography should contain the verified papers used to motivate hotspot detection, CNN architectures, classical classifiers, calibration, class imbalance, and statistical testing. Keep the bibliography in the report and cite each reference next to the claim it supports. Verify the complete bibliographic details and published comparison values against the original papers before submission.
+The raw experiment archive contains saved JSON metrics and NPZ prediction-score arrays used by the analysis. It is distributed separately from the repository because of its size.
+
+Download `da3_raw.zip` from the project's GitHub Release assets. After extracting it, set the notebook's `RAW_DIR` to the extracted results directory to regenerate analysis tables and figures without retraining, provided the archive contains the runs needed by the selected analysis cells.
+
+The processed CSV tables and figures are already included in `results/`.
+
+## Reproducing the Experiments
+
+1. Open `cnn_deep_features_with_classical_ml.ipynb` in a compatible Jupyter environment, such as Kaggle or Google Colab.
+2. Install the packages required by the notebook.
+3. Make the ICCAD-12 dataset available and configure the dataset path in the notebook.
+4. Run the experiment cells in order.
+5. Preserve generated JSON and NPZ outputs so that analysis can be performed from saved runs.
+6. To regenerate analysis without retraining, extract `da3_raw.zip` from the GitHub Release and configure `RAW_DIR` to point to the extracted raw results.
+
+See `outputs/config.json` for the recorded experiment configuration and `outputs/README_reproducibility.md` for additional run notes.
