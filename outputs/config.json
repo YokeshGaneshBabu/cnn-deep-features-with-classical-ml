@@ -1,0 +1,101 @@
+{
+  "config": {
+    "IMG_SIZE": 96,
+    "BENCHMARKS": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "SEEDS": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "RUN_SEEDS": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "BACKBONES": [
+      "ref",
+      "proposed"
+    ],
+    "LOSSES": [
+      "focal",
+      "bce"
+    ],
+    "HEADS": [
+      "SVM",
+      "RF",
+      "LR",
+      "DT"
+    ],
+    "MAIN_CONFIG": [
+      "proposed",
+      "focal"
+    ],
+    "TRAIN_CFG": {
+      "optimizer": "nadam",
+      "lr": 0.001,
+      "epochs": 20,
+      "patience": 5,
+      "reduce_lr_factor": 0.5,
+      "reduce_lr_patience": 2,
+      "min_lr": 1e-06,
+      "batch_size": 32,
+      "augment": true,
+      "val_fraction": 0.15,
+      "min_steps": 100,
+      "es_start_epoch": 3
+    },
+    "FOCAL": {
+      "gamma": 2.0,
+      "alpha": 0.75
+    },
+    "CLASS_WEIGHT_CAP": 10.0,
+    "PROPOSED_ARCH": {
+      "act": "relu",
+      "spatial_dropout": 0.1,
+      "dense_dropout": 0.5,
+      "l2": 0.0001
+    },
+    "SVM_C_GRID": [
+      0.5,
+      1.0,
+      5.0
+    ],
+    "DT_DEPTHS": [
+      "3",
+      "5",
+      "8",
+      "None"
+    ],
+    "DT_LEAVES": [
+      1,
+      5,
+      20
+    ],
+    "RF_TREES": 300
+  },
+  "environment": {
+    "python": "3.13.15",
+    "platform": "Linux-6.18.48+-x86_64-with-glibc2.39",
+    "tensorflow": "2.20.0",
+    "numpy": "2.1.3",
+    "pandas": "2.3.3",
+    "sklearn": "1.6.1",
+    "scipy": "1.16.3",
+    "gpus": [
+      "Tesla T4",
+      "Tesla T4"
+    ],
+    "n_cpu": 4,
+    "deterministic": false
+  }
+}
